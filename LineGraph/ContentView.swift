@@ -1,44 +1,58 @@
+//
+//  ContentView.swift
+//  LineGraph
+//
+//  Created by Yung Bros on 14/03/2025.
+//
+
 import SwiftUI
 
 struct TeamPerformance: Identifiable {
     let id = UUID()
     let name: String
-    let performance: Double
+    let performance: Double // Performance value (e.g., 7.0, 7.9, etc.)
 }
 
 struct ContentView: View {
     let teams: [TeamPerformance] = [
-        TeamPerformance(name: "1", performance: 7.0),
-        TeamPerformance(name: "2", performance: 7.9),
-        TeamPerformance(name: "3", performance: 7.8),
-        TeamPerformance(name: "4", performance: 7.7),
-        TeamPerformance(name: "5", performance: 7.2),
-        TeamPerformance(name: "6", performance: 7.9),
-        TeamPerformance(name: "7", performance: 7.9),
-        TeamPerformance(name: "8", performance: 8.0),
-        TeamPerformance(name: "9", performance: 8.9),
-        TeamPerformance(name: "10", performance: 7.7)
+        TeamPerformance(name: "Team 1", performance: 7.0),
+        TeamPerformance(name: "Team 2", performance: 7.9),
+        TeamPerformance(name: "Team 3", performance: 7.8),
+        TeamPerformance(name: "Team 4", performance: 7.7),
+        TeamPerformance(name: "Team 5", performance: 7.2),
+        TeamPerformance(name: "Team 6", performance: 7.9),
+        TeamPerformance(name: "Team 7", performance: 7.9),
+        TeamPerformance(name: "Team 8", performance: 8.0),
+        TeamPerformance(name: "Team 9", performance: 8.9),
+        TeamPerformance(name: "Team 10", performance: 7.7)
     ]
 
     var body: some View {
-        VStack(spacing: 10) {
-            Text("Team Performance")
-                .font(.title)
-                .padding(.bottom, 10)
+        ZStack {
+            
+            Color.white.opacity(0.07)
+                .cornerRadius(12)
+                .padding(.horizontal, 16)
 
-            LineGraph(data: teams.map { $0.performance })
-                .frame(height: 30)
-                .padding(.bottom, 10)
+            VStack(spacing: 10) {
+                Text("Team Performance")
+                    .font(.title)
+                    .padding(.bottom, 10)
 
-            HStack {
-                ForEach(teams) { team in
-                    Text(team.name)
-                        .font(.caption)
-                        .frame(width: 30)
+                LineGraph(data: teams.map { $0.performance })
+                    .frame(height: 30)
+                    .padding(.bottom, 10)
+
+                HStack {
+                    ForEach(teams) { team in
+                        Text(team.name)
+                            .font(.caption)
+                            .frame(width: 30)
+                    }
                 }
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
 
@@ -59,7 +73,7 @@ struct LineGraph: View {
                     let maxValue = data.max() ?? 1
                     let range = maxValue - minValue
                     
-                   
+                  
                     path.move(to: CGPoint(x: 0, y: height))
                     
                     for (index, value) in data.enumerated() {
@@ -84,6 +98,8 @@ struct LineGraph: View {
                                           control2: CGPoint(x: controlX2, y: controlY2))
                         }
                     }
+                    
+                   
                     path.addLine(to: CGPoint(x: width, y: height))
                     path.addLine(to: CGPoint(x: 0, y: height))
                 }
@@ -100,6 +116,8 @@ struct LineGraph: View {
                     let width = geometry.size.width
                     let height = geometry.size.height
                     let stepX = width / CGFloat(data.count - 1)
+                    
+                    
                     let minValue = data.min() ?? 0
                     let maxValue = data.max() ?? 1
                     let range = maxValue - minValue

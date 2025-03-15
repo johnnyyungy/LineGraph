@@ -11,20 +11,21 @@ struct TeamPerformance: Identifiable {
     let id = UUID()
     let name: String
     let performance: Double // Performance value (e.g., 7.0, 7.9, etc.)
+    let imageName: String // Name of the image asset
 }
 
 struct ContentView: View {
     let teams: [TeamPerformance] = [
-        TeamPerformance(name: "Team 1", performance: 7.0),
-        TeamPerformance(name: "Team 2", performance: 7.9),
-        TeamPerformance(name: "Team 3", performance: 7.8),
-        TeamPerformance(name: "Team 4", performance: 7.7),
-        TeamPerformance(name: "Team 5", performance: 7.2),
-        TeamPerformance(name: "Team 6", performance: 7.9),
-        TeamPerformance(name: "Team 7", performance: 7.9),
-        TeamPerformance(name: "Team 8", performance: 8.0),
-        TeamPerformance(name: "Team 9", performance: 8.9),
-        TeamPerformance(name: "Team 10", performance: 7.7)
+        TeamPerformance(name: "Team 1", performance: 7.0, imageName: "team1"),
+        TeamPerformance(name: "Team 2", performance: 7.9, imageName: "team2"),
+        TeamPerformance(name: "Team 3", performance: 7.8, imageName: "team3"),
+        TeamPerformance(name: "Team 4", performance: 7.7, imageName: "team4"),
+        TeamPerformance(name: "Team 5", performance: 7.2, imageName: "team5"),
+        TeamPerformance(name: "Team 6", performance: 7.9, imageName: "team6"),
+        TeamPerformance(name: "Team 7", performance: 7.9, imageName: "team7"),
+        TeamPerformance(name: "Team 8", performance: 8.0, imageName: "team8"),
+        TeamPerformance(name: "Team 9", performance: 8.9, imageName: "team9"),
+        TeamPerformance(name: "Team 10", performance: 7.7, imageName: "team10")
     ]
 
     var body: some View {
@@ -43,8 +44,7 @@ struct ContentView: View {
                     Text("Dec 24")
                         .font(.caption)
                         .foregroundColor(.gray)
-                        .padding(.leading, 16)
-                    // Adjust padding to align with the graph
+                        .padding(.leading, 16) // Adjust padding to align with the graph
 
                     Spacer()
 
@@ -63,8 +63,8 @@ struct ContentView: View {
                 HStack {
                     ForEach(teams) { team in
                         VStack(spacing: 4) {
-                            // Image (replace with your custom image if needed)
-                            Image(systemName: "person.fill") // Example system image
+                            // Custom image from assets
+                            Image(team.imageName) // Use the imageName from the TeamPerformance struct
                                 .resizable()
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(.blue)

@@ -29,7 +29,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            
+            // White container with 7% opacity
             Color.white.opacity(0.07)
                 .cornerRadius(12)
                 .padding(.horizontal, 16)
@@ -38,16 +38,43 @@ struct ContentView: View {
                 Text("Team Performance")
                     .font(.title)
                     .padding(.bottom, 10)
+                
+                HStack {
+                    Text("Dec 24")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding(.leading, 16)
+                    // Adjust padding to align with the graph
+
+                    Spacer()
+
+                    // Text on the right
+                    Text("Feb 25")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding(.trailing, 16) // Adjust padding to align with the graph
+                }
 
                 LineGraph(data: teams.map { $0.performance })
                     .frame(height: 30)
                     .padding(.bottom, 10)
 
+                // X-axis labels with image and data value
                 HStack {
                     ForEach(teams) { team in
-                        Text(team.name)
-                            .font(.caption)
-                            .frame(width: 30)
+                        VStack(spacing: 4) {
+                            // Image (replace with your custom image if needed)
+                            Image(systemName: "person.fill") // Example system image
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.blue)
+
+                            // Data value
+                            Text(String(format: "%.1f", team.performance)) // Format to 1 decimal place
+                                .font(.caption)
+                                .foregroundColor(.black)
+                        }
+                        .frame(width: 30) // Adjust width as needed
                     }
                 }
             }
@@ -62,24 +89,24 @@ struct LineGraph: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                
+                // Gradient fill below the line
                 Path { path in
                     let width = geometry.size.width
                     let height = geometry.size.height
                     let stepX = width / CGFloat(data.count - 1)
                     
-                    
+                    // Normalize the data to the range of the graph
                     let minValue = data.min() ?? 0
                     let maxValue = data.max() ?? 1
                     let range = maxValue - minValue
                     
-                  
+                    // Start at the bottom-left corner
                     path.move(to: CGPoint(x: 0, y: height))
                     
                     for (index, value) in data.enumerated() {
                         let x = CGFloat(index) * stepX
-                        let normalizedY = (value - minValue) / range
-                        let y = height * (1 - CGFloat(normalizedY))
+                        let normalizedY = (value - minValue) / range // Normalize to [0, 1]
+                        let y = height * (1 - CGFloat(normalizedY)) // Scale to graph height
                         
                         if index == 0 {
                             path.addLine(to: CGPoint(x: x, y: y))
@@ -99,7 +126,7 @@ struct LineGraph: View {
                         }
                     }
                     
-                   
+                    // Close the path by adding a line to the bottom-right corner and back to the start
                     path.addLine(to: CGPoint(x: width, y: height))
                     path.addLine(to: CGPoint(x: 0, y: height))
                 }
@@ -111,21 +138,21 @@ struct LineGraph: View {
                     )
                 )
 
-                
+                // Line graph
                 Path { path in
                     let width = geometry.size.width
                     let height = geometry.size.height
                     let stepX = width / CGFloat(data.count - 1)
                     
-                    
+                    // Normalize the data to the range of the graph
                     let minValue = data.min() ?? 0
                     let maxValue = data.max() ?? 1
                     let range = maxValue - minValue
                     
                     for (index, value) in data.enumerated() {
                         let x = CGFloat(index) * stepX
-                        let normalizedY = (value - minValue) / range
-                        let y = height * (1 - CGFloat(normalizedY)) 
+                        let normalizedY = (value - minValue) / range // Normalize to [0, 1]
+                        let y = height * (1 - CGFloat(normalizedY)) // Scale to graph height
                         
                         if index == 0 {
                             path.move(to: CGPoint(x: x, y: y))
